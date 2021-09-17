@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs')
 const User = require('../users/users-model')
 const {
   checkForUnAndPw,
-  checkUsernameAvail
+  checkUsernameAvail,
+  checkUsernameExists
 } = require('../middleware/auth-middleware')
 
 const jwt = require('jsonwebtoken')
@@ -23,8 +24,17 @@ checkUsernameAvail,
     .catch(next)
 });
 
-router.post('/login', (req, res) => {
-  res.end('implement login, please!');
+router.post('/login', checkUsernameExists, (req, res, next) => {
+  if (bcrypt.compareSync(req.body.password, req.user.password))
+  {
+    const token = buildToken(req.user)
+    res.json({
+      message: `welcome, ${req.user.username}`,
+      token,
+    })
+  } else {
+    next({ status: 401, message: 'invalid credentials' })
+  }
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.

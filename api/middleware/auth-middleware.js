@@ -22,7 +22,25 @@ async function checkUsernameAvail(req, res, next) {
     }
 }
 
+async function checkUsernameExists(req, res, next) {
+    try {
+        const [user] = await User.findBy({ username: req.body.username })
+        if (!user) {
+            next({ 
+                status: 422, 
+                message: 'invalid credentials' 
+            })
+        } else {
+            req.user = user
+            next()
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
 module.exports = {
     checkForUnAndPw,
-    checkUsernameAvail
+    checkUsernameAvail,
+    checkUsernameExists
 }
