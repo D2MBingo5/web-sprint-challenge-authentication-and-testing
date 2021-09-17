@@ -36,7 +36,7 @@ checkUsernameExists,
       token,
     })
   } else {
-    next()
+    next({ status: 422, message: 'invalid credentials' })
   }
   /*
     IMPLEMENT
