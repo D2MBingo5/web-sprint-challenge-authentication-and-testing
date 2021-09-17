@@ -24,6 +24,7 @@ describe('register user', () => {
     expect(res.status).toBe(201)
     expect(res.body).toMatchObject({ id: 1,
     username: 'superman' })
+    expect(res.body).toHaveProperty('password')
   })
 
   test('[2] responds with correct body if missing username or password', async () => {
