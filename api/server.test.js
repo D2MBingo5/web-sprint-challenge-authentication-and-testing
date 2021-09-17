@@ -73,7 +73,16 @@ describe('login user', () => {
     expect(res.body).toHaveProperty('token')
   })
 
-  test.todo('[5] responds with correct body if missing username or password')
+  test('[5] responds with correct body if missing username or password', async () => {
+    let res = await request(server).post('/api/auth/login')
+    .send({ username: 'clark' })
+    expect(res.status).toBe(422)
+    expect(res.body.message).toMatch(/username and password required/i)
+    res = await request(server).post('/api/auth/login')
+    .send({ password: 'super' })
+    expect(res.status).toBe(422)
+    expect(res.body.message).toMatch(/username and password required/i)
+  })
 
   test.todo('[6] responds with correct body if UN/PW is incorrect')
 
