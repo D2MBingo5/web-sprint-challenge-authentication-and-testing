@@ -26,7 +26,16 @@ describe('register user', () => {
     username: 'superman' })
   })
 
-  test.todo('responds with correct body if missing username or password')
+  test('responds with correct body if missing username or password', async () => {
+    let res = await request(server).post('/api/auth/register')
+    .send({ username: 'foo' })
+    .expect(res.status).toBe(422)
+    .expect(res.body).toMatch(/username and password required/i)
+    res = await request(server).post('/api/auth/register')
+    .send({ password: 'foo' })
+    .expect(res.status).toBe(422)
+    .expect(res.body).toMatch(/username and password required/i)
+  })
 
   test.todo('responds with correct body if username taken')
 
