@@ -58,7 +58,20 @@ describe('register user', () => {
 
 describe('login user', () => {
 
-  test.todo('[4] successful registration contains token in body')
+  test('[4] successful login responds with correct body', async () => {
+    const regUser = await request(server).post('/api/auth/register')
+    .send({
+        username: 'clark',
+        password: 'super'
+    })
+    const res = await request(server).post('/api/auth/login')
+    .send({
+      username: 'clark',
+      password: 'super'
+    })
+    expect(res.body.message).toMatch(/welcome, clark/i)
+    expect(res.body).toHaveProperty('token')
+  })
 
   test.todo('[5] responds with correct body if missing username or password')
 

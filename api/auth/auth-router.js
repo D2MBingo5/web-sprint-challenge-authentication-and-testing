@@ -4,7 +4,7 @@ const User = require('../users/users-model')
 const {
   checkForUnAndPw,
   checkUsernameAvail
-} = require('./auth-middleware')
+} = require('../middleware/auth-middleware')
 
 router.post('/register',
 checkForUnAndPw, 
