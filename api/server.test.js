@@ -37,7 +37,21 @@ describe('register user', () => {
     expect(res.body.message).toMatch(/username and password required/i)
   })
 
-  test.todo('responds with correct body if username taken')
+  test('responds with correct body if username taken', async () => {
+    let res = await request(server).post('/api/auth/register')
+    .send({ 
+      username: 'george',
+      password: 'super'
+    })
+    expect(res.status).toBe(201)
+    res = await request(server).post('/api/auth/register')
+    .send({ 
+      username: 'george',
+      password: 'super'
+    }) // out of the box, this sends a 500 status because of the knex schema in data/migrations/20201123181212_users.js
+    expect(res.status).toBe(500)
+    expect(res.body.message).toMatch(/username taken/i)
+  })
 
 })
 
