@@ -6,6 +6,9 @@ const {
   checkUsernameAvail
 } = require('../middleware/auth-middleware')
 
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET } = require('../secrets')
+
 router.post('/register',
 checkForUnAndPw, 
 checkUsernameAvail,
@@ -46,5 +49,17 @@ router.post('/login', (req, res) => {
       the response body should include a string exactly as follows: "invalid credentials".
   */
 });
+
+function buildToken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username,
+    password: user.password,
+  }
+  const options = {
+    expiresIn: '1d',
+  }
+  return jwt.sign(payload, JWT_SECRET, options)
+}
 
 module.exports = router;
